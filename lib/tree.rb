@@ -3,6 +3,7 @@ require_relative 'node'
 class Tree
   def initialize(arr)
     @root = build_tree(arr)
+    @n = arr.uniq.length
   end
 
   def build_tree(arr)
@@ -28,5 +29,31 @@ class Tree
     p_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
     p_print(node.left, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left
+  end
+
+  def insert(value)
+    node = @root
+    node_v = Node.new(value)
+
+    @n.times do
+      return value if node_v == node
+      if node_v < node
+        if node.left.nil?
+          @n += 1
+          node.left = node_v
+          return value
+        else
+          node = node.left
+        end
+      else
+        if node.right.nil?
+          @n += 1
+          node.right = node_v
+          return value
+        else
+          node = node.right
+        end
+      end
+    end
   end
 end
