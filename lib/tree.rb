@@ -3,7 +3,6 @@ require_relative 'node'
 class Tree
   def initialize(arr)
     @root = build_tree(arr)
-    @n = arr.uniq.length
   end
 
   def build_tree(arr)
@@ -33,27 +32,16 @@ class Tree
 
   def insert(value)
     node = @root
-    node_v = Node.new(value)
+    new_node = Node.new(value)
 
-    @n.times do
-      return value if node_v == node
-      if node_v < node
-        if node.left.nil?
-          @n += 1
-          node.left = node_v
-          return value
-        else
-          node = node.left
-        end
-      else
-        if node.right.nil?
-          @n += 1
-          node.right = node_v
-          return value
-        else
-          node = node.right
-        end
+    loop do
+      return if value == node.data
+      side = value < node.data ? :left : :right
+      if node.send(side).nil?
+        node.send("#{side}=", new_node)
+        break
       end
-    end
+      node = node.send(side)
+    end 
   end
 end
