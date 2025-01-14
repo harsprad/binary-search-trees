@@ -44,4 +44,42 @@ class Tree
       node = node.send(side)
     end 
   end
+
+  def delete(value)
+    node = @root
+
+    until node.nil? do
+      return delete_node(node) if node.data == value
+      node = node.data > value ? node.left : node.right
+    end
+  end
+
+  def delete_node(node)
+    node.data = pop_closest_sub_node(node)
+  end
+
+  def pop_closest_sub_node(node)
+    return nil unless node.children?
+
+    supra_node = node
+    if !node.right.nil?
+      leftest_right = node.right
+      until leftest_right.left.nil?
+        supra_node = leftest_right
+        leftest_right = leftest_right.left
+      end
+      supra_node.right = leftest_right.right if supra_node == node
+      supra_node.left = leftest_right.right unless supra_node == node 
+      return leftest_right.data
+    else
+      rightest_left = node.left
+      until rightest_left.right.nil?
+        supra_node = rightest_left
+        rightest_left = rightest_left.right
+      end
+      supra_node.left = rightest_left.left if supra_node == node
+      supra_node.right = rightest_left.left unless supra_node == node 
+      return rightest_left.data
+    end
+  end
 end

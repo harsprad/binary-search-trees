@@ -12,4 +12,8 @@ class Node
   def <=>(other)
     @data <=> other.data
   end
+
+  def children?
+    @left.nil? && @right.nil? ? false : true
+  end
 end
