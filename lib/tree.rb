@@ -82,4 +82,12 @@ class Tree
       return rightest_left.data
     end
   end
+
+  def find(value, node=@root)
+    until node.data == value || node.nil?
+      node = value < node.data ? node.left : node.right
+    end 
+    
+    node
+  end
 end
