@@ -132,14 +132,24 @@ class Tree
     if type == :pre
       result << (block_given? ? block.call(node) : node.data)
     end
+
     result.concat(depth_order(type, node.left, &block)) 
+
     if type == :in
     result << (block_given? ? block.call(node) : node.data)
     end
+    
     result.concat(depth_order(type, node.right, &block))
+
     if type == :post
     result << (block_given? ? block.call(node) : node.data) 
     end
     result
+  end
+  
+  def height(node)
+    return 0 if node.nil?
+
+    1 + [height(node.left), height(node.right)].max
   end
 end
