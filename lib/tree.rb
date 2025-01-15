@@ -122,4 +122,24 @@ class Tree
       [ node.data ].concat(level_order_recursive(queue))
     end
   end
+
+  def depth_order(type, node=@root, &block)
+    return [] if node.nil?
+    valid_types = [:pre, :in, :post]
+    raise ArgumentError, "Invalid" unless valid_types.include?(type)
+
+    result = []
+    if type == :pre
+      result << (block_given? ? block.call(node) : node.data)
+    end
+    result.concat(depth_order(type, node.left, &block)) 
+    if type == :in
+    result << (block_given? ? block.call(node) : node.data)
+    end
+    result.concat(depth_order(type, node.right, &block))
+    if type == :post
+    result << (block_given? ? block.call(node) : node.data) 
+    end
+    result
+  end
 end
