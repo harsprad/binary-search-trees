@@ -152,4 +152,16 @@ class Tree
 
     1 + [height(node.left), height(node.right)].max
   end
+
+  def depth(node)
+    search = @root
+    result = 0
+    
+    until search == node || search.nil?
+      search = search > node ? search.left : search.right
+      result += 1
+    end
+
+    result
+  end
 end
