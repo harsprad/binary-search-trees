@@ -87,7 +87,39 @@ class Tree
     until node.data == value || node.nil?
       node = value < node.data ? node.left : node.right
     end 
-    
+
     node
+  end
+
+  def level_order
+    pointer = 0
+    queue = []
+    queue << @root unless @root.nil?
+    while pointer < queue.length
+      node = queue[pointer]
+      queue.append(node.left) unless node.left.nil?
+      queue.append(node.right) unless node.right.nil?
+      pointer += 1
+    end
+
+    if block_given?
+      return queue.map{ |node| yield(node) }
+    else
+      return queue.map{ |node| node.data }
+    end
+  end
+
+  def level_order_recursive(queue=[@root], &block)
+    return [] if queue.length == 0
+
+    node = queue.shift
+    queue.append(node.left) unless node.left.nil?
+    queue.append(node.right) unless node.right.nil?
+
+    if block_given?
+      [ block.call(node) ].concat(level_order_recursive(queue, &block))
+    else
+      [ node.data ].concat(level_order_recursive(queue))
+    end
   end
 end
