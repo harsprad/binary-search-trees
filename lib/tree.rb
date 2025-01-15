@@ -147,7 +147,7 @@ class Tree
     result
   end
   
-  def height(node)
+  def height(node=@root)
     return 0 if node.nil?
 
     1 + [height(node.left), height(node.right)].max
@@ -163,5 +163,18 @@ class Tree
     end
 
     result
+  end
+
+  def balanced?(node=@root)
+    return true if node.nil?
+
+    node_balance = (height(node.left) - height(node.right)).abs <= 1
+    node_balance && balanced?(node.left) && balanced?(node.right)
+  end
+
+  def rebalance
+    return @root if balanced?
+
+    @root = build_tree(depth_order(:in))
   end
 end
